@@ -1,0 +1,1 @@
+# boss-rc505-config
