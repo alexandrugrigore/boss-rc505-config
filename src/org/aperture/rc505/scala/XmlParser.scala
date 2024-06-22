@@ -1,4 +1,4 @@
-package org.aperture.rc505.scala.launcher
+package org.aperture.rc505.scala
 
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 
@@ -6,7 +6,7 @@ import scala.xml.{Elem, Node, XML}
 
 object XmlParser {
 
-  def read() = {
+  def read(): List[Memory] = {
     val xmlFile = "resources/MEMORY.RC0"
     val xml = XML.loadFile(xmlFile)
 

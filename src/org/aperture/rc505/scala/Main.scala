@@ -1,8 +1,9 @@
-package org.aperture.rc505.scala.launcher
+package org.aperture.rc505.scala
+
 import javafx.application.Application
 import javafx.scene.{Node, Scene}
 import javafx.scene.control.{Button, ScrollPane, TreeView}
-import javafx.scene.layout.{HBox, StackPane, VBox}
+import javafx.scene.layout.{HBox, VBox}
 import javafx.stage.Stage
 
 object Main {
@@ -30,7 +31,7 @@ class MainApp extends Application {
       hbox.getChildren.addAll(button1, button2)
 
       primaryStage.setScene(new Scene(hbox, 1600, 900))
-      primaryStage.setMaximized(true)
+//      primaryStage.setMaximized(true)
       primaryStage.show()
     }
 
@@ -49,7 +50,7 @@ class MainApp extends Application {
 
       val vbox = new VBox()
       // Add new data
-      memories.foreach(mem => {
+      memories.zipWithIndex.foreach(mem => {
         val rootItem = TreeUtils.createTreeItem(mem)
         val treeView = new TreeView[Node](rootItem)
         treeView.setPrefHeight(500) // Set your desired height

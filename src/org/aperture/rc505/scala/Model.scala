@@ -1,5 +1,4 @@
-package org.aperture.rc505.scala.launcher
-
+package org.aperture.rc505.scala
 
 import com.lucidchart.open.xtract.{XmlReader, __}
 import com.lucidchart.open.xtract.XmlReader._

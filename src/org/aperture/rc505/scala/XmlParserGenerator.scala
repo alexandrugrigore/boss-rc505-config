@@ -1,4 +1,4 @@
-package org.aperture.rc505.scala.launcher
+package org.aperture.rc505.scala
 
 import scala.xml.{Elem, XML}
 
