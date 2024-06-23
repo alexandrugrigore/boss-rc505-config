@@ -28,7 +28,7 @@ object TreeUtils {
     trackItem
   }
 
-  def createTreeItem(memoryZip: (Memory, Int)): TreeItem[Node] = {
+  def createTreeItem(hbox: HBox, memoryZip: (Memory, Int)): TreeItem[Node] = {
     val memory = memoryZip._1
     val fieldBox = new HBox(10)
     fieldBox.getChildren.add(new Label(s"${memoryZip._2.toString} ${Utils.parseName(memory.name)}"))
@@ -36,7 +36,7 @@ object TreeUtils {
     val copyButton = new Button("Copy all configs to all 'INIT MEMORY'")
     copyButton.setOnAction(_ => {
       MainApp.memoriesCache = Utils.copyMemory(memory)
-      MainApp
+      MainApp.updateHBox(hbox, MainApp.memoriesCache)
     })
 
     fieldBox.getChildren.add(copyButton)

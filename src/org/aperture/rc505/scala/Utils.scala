@@ -13,7 +13,7 @@ object Utils {
   def copyMemory(src: Memory): List[Memory] = {
     val srcName = Utils.parseName(src.name)
     MainApp.memoriesCache.map(mem => {
-      if (Utils.parseName(mem.name).equals("INIT MEMORY")) {
+      if (Utils.parseName(mem.name).strip().equals("INIT MEMORY")) {
         src.copy(name = Utils.nameToConfig(s"CP ${srcName}"))
       } else {
         mem
