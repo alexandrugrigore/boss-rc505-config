@@ -31,10 +31,13 @@ object TreeUtils {
   def createTreeItem(memoryZip: (Memory, Int)): TreeItem[Node] = {
     val memory = memoryZip._1
     val fieldBox = new HBox(10)
-    fieldBox.getChildren.add(new Label(memoryZip._2.toString))
+    fieldBox.getChildren.add(new Label(s"${memoryZip._2.toString} ${Utils.parseName(memory.name)}"))
 
-    val copyButton = new Button("Copy to all")
-    copyButton.setOnAction(_ => print("Copy"))
+    val copyButton = new Button("Copy all configs to all 'INIT MEMORY'")
+    copyButton.setOnAction(_ => {
+      MainApp.memoriesCache = Utils.copyMemory(memory)
+      MainApp
+    })
 
     fieldBox.getChildren.add(copyButton)
     val rootItem = new TreeItem[Node](fieldBox)
