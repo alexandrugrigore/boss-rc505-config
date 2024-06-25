@@ -2,7 +2,7 @@ package org.aperture.rc505.scala
 
 import javafx.scene.Node
 import javafx.scene.control.{Button, Label, TextField, TreeItem}
-import javafx.scene.layout.HBox
+import javafx.scene.layout.{HBox, VBox}
 
 object TreeUtils {
 
@@ -28,7 +28,7 @@ object TreeUtils {
     trackItem
   }
 
-  def createTreeItem(hbox: HBox, memoryZip: (MutableMemory, Int)): (TreeItem[Node], Memory) = {
+  def createTreeItem(vbox: VBox, memoryZip: (MutableMemory, Int)): (TreeItem[Node], Memory) = {
     val mutableMemory = memoryZip._1
 
     val fieldBox = new HBox(10)
@@ -42,11 +42,12 @@ object TreeUtils {
     val copyButton = new Button("Copy all configs to all 'INIT MEMORY'")
     copyButton.setOnAction(_ => {
       Utils.copyMemory(mutableMemory)
-      MainApp.updateHBox(hbox, MainApp.memoriesCache)
+      MainApp.updateHBox(vbox, MainApp.memoriesCache)
     })
 
     fieldBox.getChildren.add(copyButton)
     val rootItem = new TreeItem[Node](fieldBox)
+    rootItem.setExpanded(true)
 
     val fields =  mutableMemory.memory.productElementNames.zip( mutableMemory.memory.productIterator)
     fields.foreach { case (fieldName, fieldValue: Product) =>

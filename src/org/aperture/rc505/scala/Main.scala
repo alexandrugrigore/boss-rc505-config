@@ -18,64 +18,64 @@ class MutableMemory(var memory: Memory)
 object MainApp {
   var memoriesCache: List[MutableMemory] = _
 
-  def buttonConfigs(hbox: HBox): (Button, Button, Button) = {
+  def buttonConfigs(vbox: VBox): HBox = {
+    val hbox = new HBox(10)
     val button1 = new Button("Generate")
     button1.setOnAction(_ => XmlParserGenerator.generate())
 
     val button2 = new Button("Read")
     button2.setOnAction(_ => {
       memoriesCache = XmlParser.read().map(x => new MutableMemory(x))
-      updateHBox(hbox, memoriesCache)
+      updateHBox(vbox, memoriesCache)
     })
 
     val button3 = new Button("Save")
     button3.setOnAction(_ => {
       XmlWriter.write(memoriesCache.map(_.memory))
     })
-    (button1, button2, button3)
+
+    hbox.getChildren.addAll(button1, button2, button3)
+    hbox
   }
 
-  def updateHBox(hbox: HBox, memories: List[MutableMemory]): Unit = {
+  def updateHBox(vbox: VBox, memories: List[MutableMemory]): Unit = {
     // Clear previous content except the buttons
-    hbox.getChildren.clear()
+    vbox.getChildren.clear()
 
-    val buttons = buttonConfigs(hbox)
-    hbox.getChildren.addAll(buttons._1, buttons._2, buttons._3)
+    val hbox = buttonConfigs(vbox)
 
-    val vbox = new VBox()
+    val treeVbox = new VBox()
+
+    treeVbox.getChildren.add(hbox)
     // Add new data
     memories.zipWithIndex.map(mem => {
-      val rootItem = TreeUtils.createTreeItem(hbox, mem)
+      val rootItem = TreeUtils.createTreeItem(vbox, mem)
       val treeView = new TreeView[Node](rootItem._1)
       treeView.setPrefHeight(500)
       treeView.setMinHeight(500)
       treeView.setPrefWidth(1000)
       treeView.setMinWidth(1000)
-      vbox.getChildren.add(treeView)
+      treeVbox.getChildren.add(treeView)
       rootItem._2
     })
 
     val scrollPane = new ScrollPane()
-    scrollPane.setContent(vbox)
+    scrollPane.setContent(treeVbox)
     scrollPane.setFitToWidth(true)
     scrollPane.setFitToHeight(true)
     scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS)
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER)
-    hbox.getChildren.add(scrollPane)
+    vbox.getChildren.add(scrollPane)
   }
 }
 
 class MainApp extends Application {
-  var hbox: HBox = _
 
   override def start(primaryStage: Stage): Unit = {
     primaryStage.setTitle("BOSS RC505 configurator")
     val vbox = new VBox()
-    hbox = new HBox(10)
 
-
-    val buttons = buttonConfigs(hbox)
-    hbox.getChildren.addAll(buttons._1, buttons._2, buttons._3)
+    val hbox = buttonConfigs(vbox)
 
     vbox.getChildren.add(hbox)
 
