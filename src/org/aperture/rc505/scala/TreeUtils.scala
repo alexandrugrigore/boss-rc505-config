@@ -47,7 +47,7 @@ object TreeUtils {
 
     fieldBox.getChildren.add(copyButton)
     val rootItem = new TreeItem[Node](fieldBox)
-    rootItem.setExpanded(true)
+//    rootItem.setExpanded(true)
 
     val fields =  mutableMemory.memory.productElementNames.zip( mutableMemory.memory.productIterator)
     fields.foreach { case (fieldName, fieldValue: Product) =>
