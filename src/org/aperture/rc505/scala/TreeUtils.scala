@@ -6,7 +6,7 @@ import javafx.scene.layout.HBox
 
 object TreeUtils {
 
-  def createTrackTreeItem(trackName: String, track: Product): TreeItem[Node] = {
+  private def createInnerTreeItem(trackName: String, track: Product): TreeItem[Node] = {
     val trackItem = new TreeItem[Node](new Label(trackName))
     val fields = track.productElementNames.zip(track.productIterator)
 
@@ -28,25 +28,31 @@ object TreeUtils {
     trackItem
   }
 
-  def createTreeItem(hbox: HBox, memoryZip: (Memory, Int)): TreeItem[Node] = {
-    val memory = memoryZip._1
+  def createTreeItem(hbox: HBox, memoryZip: (MutableMemory, Int)): (TreeItem[Node], Memory) = {
+    val mutableMemory = memoryZip._1
+
     val fieldBox = new HBox(10)
-    fieldBox.getChildren.add(new Label(s"${memoryZip._2.toString} ${Utils.parseName(memory.name)}"))
+    val nameTextField = new TextField(s"${Utils.parseName(mutableMemory.memory.name)}")
+    nameTextField.setOnAction(_ => {
+      mutableMemory.memory = mutableMemory.memory.copy(name = Utils.nameToConfig(nameTextField.getText))
+    })
+    fieldBox.getChildren.add(new Label(s"${memoryZip._2.toString}"))
+    fieldBox.getChildren.add(nameTextField)
 
     val copyButton = new Button("Copy all configs to all 'INIT MEMORY'")
     copyButton.setOnAction(_ => {
-      MainApp.memoriesCache = Utils.copyMemory(memory)
+      Utils.copyMemory(mutableMemory)
       MainApp.updateHBox(hbox, MainApp.memoriesCache)
     })
 
     fieldBox.getChildren.add(copyButton)
     val rootItem = new TreeItem[Node](fieldBox)
 
-    val fields = memory.productElementNames.zip(memory.productIterator)
+    val fields =  mutableMemory.memory.productElementNames.zip( mutableMemory.memory.productIterator)
     fields.foreach { case (fieldName, fieldValue: Product) =>
-      rootItem.getChildren.add(createTrackTreeItem(fieldName, fieldValue))
+      rootItem.getChildren.add(createInnerTreeItem(fieldName, fieldValue))
     }
 
-    rootItem
+    (rootItem,  mutableMemory.memory)
   }
 }

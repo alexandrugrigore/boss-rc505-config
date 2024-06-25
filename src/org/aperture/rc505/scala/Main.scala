@@ -13,8 +13,10 @@ object Main {
   }
 }
 
+class MutableMemory(var memory: Memory)
+
 object MainApp {
-  var memoriesCache: List[Memory] = _
+  var memoriesCache: List[MutableMemory] = _
 
   def buttonConfigs(hbox: HBox): (Button, Button, Button) = {
     val button1 = new Button("Generate")
@@ -22,18 +24,18 @@ object MainApp {
 
     val button2 = new Button("Read")
     button2.setOnAction(_ => {
-      memoriesCache = XmlParser.read()
+      memoriesCache = XmlParser.read().map(x => new MutableMemory(x))
       updateHBox(hbox, memoriesCache)
     })
 
     val button3 = new Button("Save")
     button3.setOnAction(_ => {
-      XmlWriter.write(memoriesCache)
+      XmlWriter.write(memoriesCache.map(_.memory))
     })
     (button1, button2, button3)
   }
 
-  def updateHBox(hbox: HBox, memories: List[Memory]): Unit = {
+  def updateHBox(hbox: HBox, memories: List[MutableMemory]): Unit = {
     // Clear previous content except the buttons
     hbox.getChildren.clear()
 
@@ -42,15 +44,17 @@ object MainApp {
 
     val vbox = new VBox()
     // Add new data
-    memories.zipWithIndex.foreach(mem => {
+    memories.zipWithIndex.map(mem => {
       val rootItem = TreeUtils.createTreeItem(hbox, mem)
-      val treeView = new TreeView[Node](rootItem)
+      val treeView = new TreeView[Node](rootItem._1)
       treeView.setPrefHeight(500)
       treeView.setPrefWidth(500)
       treeView.setMinHeight(500)
       treeView.setMinWidth(500)
       vbox.getChildren.add(treeView)
+      rootItem._2
     })
+
     val scrollPane = new ScrollPane()
     scrollPane.setContent(vbox)
     scrollPane.setFitToWidth(true)
