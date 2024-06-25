@@ -9,7 +9,7 @@ object XmlWriter {
 
     println(xmlContent)
 
-    val pw = new PrintWriter("output.xml")
+    val pw = new PrintWriter("MEMORY.RC0")
     pw.write(xmlContent)
     pw.close()
   }
