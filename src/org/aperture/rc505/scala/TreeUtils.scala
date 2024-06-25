@@ -36,7 +36,7 @@ object TreeUtils {
     nameTextField.setOnAction(_ => {
       mutableMemory.memory = mutableMemory.memory.copy(name = Utils.nameToConfig(nameTextField.getText))
     })
-    fieldBox.getChildren.add(new Label(s"${memoryZip._2.toString}"))
+    fieldBox.getChildren.add(new Label(s"${(memoryZip._2 + 1).toString}"))
     fieldBox.getChildren.add(nameTextField)
 
     val copyButton = new Button("Copy all configs to all 'INIT MEMORY'")

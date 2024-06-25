@@ -22,7 +22,7 @@ object XmlWriter {
         |""".stripMargin
     )
 
-    memories.take(1).zipWithIndex.map{ memory =>
+    memories.zipWithIndex.map{ memory =>
       val mem = memory._1
       sb.append(s"""<mem id="${memory._2}">\n""")
       val fields = mem.productElementNames.zip(mem.productIterator)

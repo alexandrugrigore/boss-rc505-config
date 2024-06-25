@@ -2,7 +2,7 @@ package org.aperture.rc505.scala
 
 import javafx.application.Application
 import javafx.scene.control.{Button, ScrollPane, TreeView}
-import javafx.scene.layout.{HBox, VBox}
+import javafx.scene.layout.{HBox, Priority, VBox}
 import javafx.scene.{Node, Scene}
 import javafx.stage.Stage
 import org.aperture.rc505.scala.MainApp.buttonConfigs
@@ -48,9 +48,9 @@ object MainApp {
       val rootItem = TreeUtils.createTreeItem(hbox, mem)
       val treeView = new TreeView[Node](rootItem._1)
       treeView.setPrefHeight(500)
-      treeView.setPrefWidth(500)
       treeView.setMinHeight(500)
-      treeView.setMinWidth(500)
+      treeView.setPrefWidth(1000)
+      treeView.setMinWidth(1000)
       vbox.getChildren.add(treeView)
       rootItem._2
     })
@@ -69,13 +69,17 @@ class MainApp extends Application {
   var hbox: HBox = _
 
   override def start(primaryStage: Stage): Unit = {
-    primaryStage.setTitle("BossRC505!")
+    primaryStage.setTitle("BOSS RC505 configurator")
+    val vbox = new VBox()
     hbox = new HBox(10)
+
 
     val buttons = buttonConfigs(hbox)
     hbox.getChildren.addAll(buttons._1, buttons._2, buttons._3)
 
-    primaryStage.setScene(new Scene(hbox, 1600, 900))
+    vbox.getChildren.add(hbox)
+
+    primaryStage.setScene(new Scene(vbox, 1600, 900))
     //      primaryStage.setMaximized(true)
     primaryStage.show()
   }
